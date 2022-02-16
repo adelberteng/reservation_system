@@ -1,15 +1,51 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
+# Cache / Temporary
+__pycache__
+.cache
+tmp
+temp
+*.py[cod]
 *.so
-*.dylib
+.coverage
 
-# Test binary, built with `go test -c`
-*.test
+# OS generated
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
 
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
+# Editor
+*.idea
+*.swp
+*.vscode
+*~
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Build
+bin/
+lib/
+log/
+log/engine_api/*
+build/*
+*.eggs
+*.egg-info
+dist/
+sdist/
+wheels/
+var/
+MANIFEST
+_build/*
+_static/*
+_template/*
+
+
+# Environments
+venv/
+.python-version
+pyvenv.cfg
+
+# Unit test / coverage reports
+.coverage
+.tox/
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
