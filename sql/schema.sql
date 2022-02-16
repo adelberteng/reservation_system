@@ -1,0 +1,66 @@
+CREATE TABLE IF NOT EXISTS user_tbl (
+	uid INT AUTO_INCREMENT NOT NULL,
+	name VARCHAR(32) NOT NULL,
+	phone CHAR(10) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	PRIMARY KEY (uid)
+);
+
+CREATE TABLE IF NOT EXISTS owner_tbl (
+	id INT AUTO_INCREMENT NOT NULL,
+	company_name VARCHAR(32) NOT NULL,
+	phone CHAR(10) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS region_tbl (
+	id INT AUTO_INCREMENT NOT NULL,
+	region_name VARCHAR(32) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS place_type_tbl (
+	id INT AUTO_INCREMENT NOT NULL,
+	type_name VARCHAR(32) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS place_tbl (
+	id INT AUTO_INCREMENT NOT NULL,
+	owner_id INT NOT NULL,
+	region_id INT NOT NULL,
+	type_id INT NOT NULL,
+	address VARCHAR(255) NOT NULL,
+	capacity INT,
+	PRIMARY KEY (id),
+    FOREIGN KEY (owner_id)
+        REFERENCES owner_tbl (id)
+        ON UPDATE RESTRICT 
+		ON DELETE CASCADE,
+	FOREIGN KEY (region_id)
+        REFERENCES region_tbl (id)
+        ON UPDATE RESTRICT 
+		ON DELETE CASCADE,
+	FOREIGN KEY (type_id)
+        REFERENCES place_tbl (id)
+        ON UPDATE RESTRICT 
+		ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS activity_tbl (
+	id INT AUTO_INCREMENT NOT NULL,
+	client_id INT NOT NULL,
+	place_id INT NOT NULL,
+	start_time DATETIME NOT NULL,
+	end_time DATETIME NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (client_id)
+        REFERENCES user_tbl (uid)
+        ON UPDATE RESTRICT 
+		ON DELETE CASCADE,
+	FOREIGN KEY (place_id)
+        REFERENCES place_tbl (id)
+        ON UPDATE RESTRICT 
+		ON DELETE CASCADE
+);
