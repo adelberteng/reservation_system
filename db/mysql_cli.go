@@ -10,14 +10,14 @@ import (
 )
 
 var (
-	cfg = utils.GetConfig()
-	logger = utils.GetLogger()
-	dbType string
-	dbEndpoint string
-	dbPort string
-	dbUser string
-	dbPassword string
-	dbDB string
+	cfg              = utils.GetConfig()
+	logger           = utils.GetLogger()
+	dbType           string
+	dbEndpoint       string
+	dbPort           string
+	dbUser           string
+	dbPassword       string
+	dbDB             string
 	dataSourceString string
 )
 
@@ -29,11 +29,11 @@ func init() {
 	dbPassword = cfg.Section("db").Key("password").String()
 	dbDB = cfg.Section("db").Key("db").String()
 	dataSourceString = fmt.Sprintf(
-		"%v:%v@tcp(%v:%v)/%v?charset=utf8", 
-		dbEndpoint, 
-		dbPort, 
-		dbUser, 
-		dbPassword, 
+		"%v:%v@tcp(%v:%v)/%v?charset=utf8",
+		dbUser,
+		dbPassword,
+		dbEndpoint,
+		dbPort,
 		dbDB,
 	)
 }
