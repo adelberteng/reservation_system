@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/adelberteng/go_logger v0.0.0-20220210143346-fc702892e7dc
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/golang-jwt/jwt/v4 v4.3.0
 	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e
 	gopkg.in/ini.v1 v1.66.4
 	xorm.io/xorm v1.2.5
