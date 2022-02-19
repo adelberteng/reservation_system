@@ -7,8 +7,6 @@ import (
 	// "time"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/golang-jwt/jwt/v4"
-
 	"github.com/adelberteng/reservation_system/db"
 	"github.com/adelberteng/reservation_system/utils"
 )
@@ -118,37 +116,3 @@ func Login(name, password string) (User, error) {
 	return user, nil
 }
 
-func ApplyJWT() (string, error) {
-	Claims := jwt.MapClaims{
-		"foo": "bar",
-		// "nbf": time.Date(2015, 10, 10, 12, 0, 0, 0, time.UTC).Unix(),
-	}
-
-	var hmacSecret []byte
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims)
-	fmt.Println(token)
-	tokenString, err := token.SignedString(hmacSecret)
-	fmt.Println(tokenString, err)
-	return tokenString, err
-}
-
-func ParseJWT(tokenString string) (jwt.MapClaims, error) {
-	var hmacSecret []byte
-
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New(fmt.Sprintf("Unexpected signing method: %v", token.Header["alg"]))
-		}
-
-		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
-		return hmacSecret, nil
-	})
-
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims, nil
-	} else {
-		return nil, err
-	}
-}
