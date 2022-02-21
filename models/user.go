@@ -1,11 +1,8 @@
 package models
 
 import (
-	// "fmt"
 	"errors"
 	"fmt"
-	// "time"
-	"golang.org/x/crypto/bcrypt"
 
 	"github.com/adelberteng/reservation_system/db"
 	"github.com/adelberteng/reservation_system/utils"
@@ -35,28 +32,6 @@ func (u *User) TableName() string {
 	return "user_tbl"
 }
 
-func GeneratePasswordHash(password string) (string, error) {
-	pw := []byte(password)
-	passwordHash, err := bcrypt.GenerateFromPassword(pw, bcrypt.MinCost)
-	if err != nil {
-		return "", err
-	}
-
-	return string(passwordHash), nil
-}
-
-func verifyPassword(password, passwordHash string) bool {
-	pw := []byte(password)
-	hash := []byte(passwordHash)
-
-	err := bcrypt.CompareHashAndPassword(hash, pw)
-	if err != nil {
-		return false
-	}
-
-	return true
-}
-
 func Register(name, password, phone, email string) error {
 	nameResult, err := engine.Table("user_tbl").Where("name = ?", name).QueryString()
 	if err != nil {
@@ -79,8 +54,7 @@ func Register(name, password, phone, email string) error {
 		return errors.New("This email address had been registered")
 	}
 
-	// generate the password hash with salt.
-	passwordHash, err := GeneratePasswordHash(password)
+	passwordHash, err := utils.GeneratePasswordHash(password)
 	if err != nil {
 		return err
 	}
@@ -101,7 +75,7 @@ func Login(name, password string) (User, error) {
 		fmt.Println(err)
 	}
 
-	isCorrect := verifyPassword(password, passwordHash)
+	isCorrect := utils.VerifyPassword(password, passwordHash)
 	if !isCorrect {
 		return User{}, errors.New("password is incorrect, please try again.")
 	}
@@ -115,4 +89,3 @@ func Login(name, password string) (User, error) {
 
 	return user, nil
 }
-
