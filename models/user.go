@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/adelberteng/reservation_system/db"
 	"github.com/adelberteng/reservation_system/utils"
@@ -32,57 +31,20 @@ func (u *User) TableName() string {
 	return "user_tbl"
 }
 
-func Register(name, password, phone, email string) error {
-	queryResult, err := engine.Table("user_tbl").Where(
-		"name = ? and phone = ? and email = ? ", name, phone, email).QueryString()
-
-	var record map[string]string
-	if queryResult != nil {
-		record = queryResult[0]
-	}
-
-	if record["name"] == name {
-		return errors.New("This user name had been registered")
-	} else if record["phone"] == phone {
-		return errors.New("This phone number had been registered")
-	} else if record["email"] == email {
-		return errors.New("This email address had been registered")
+func GetUserByName(name string) (User, error) {
+	queryResult, err := engine.Table("user_tbl").Where("name = ? ", name).QueryString()
+	if queryResult == nil {
+		return User{}, errors.New("the user is not exist.")
 	} else if err != nil {
-		return err
-	}
-
-	passwordHash, err := utils.GeneratePasswordHash(password)
-	if err != nil {
-		return err
-	}
-
-	user := User{Name: name, PasswordHash: passwordHash, Phone: phone, Email: email}
-
-	_, err = engine.Insert(&user)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Login(name, password string) (User, error) {
-	res, err := engine.Table("user_tbl").Where("name = ?", name).QueryString()
-	passwordHash := res[0]["password_hash"]
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	isCorrect := utils.VerifyPassword(password, passwordHash)
-	if !isCorrect {
-		return User{}, errors.New("password is incorrect, please try again.")
+		return User{}, err
 	}
 
 	user := User{
-		Uid:   res[0]["uid"],
-		Name:  res[0]["name"],
-		Phone: res[0]["phone"],
-		Email: res[0]["email"],
+		Uid:          queryResult[0]["uid"],
+		Name:         name,
+		PasswordHash: queryResult[0]["password_hash"],
+		Phone:        queryResult[0]["phone"],
+		Email:        queryResult[0]["email"],
 	}
 
 	return user, nil
