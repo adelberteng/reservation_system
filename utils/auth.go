@@ -51,7 +51,6 @@ func GenerateJWT(payload map[string]string) (string, error) {
 	hmacSecret := []byte(secretKey)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	fmt.Println(token)
 	tokenString, err := token.SignedString(hmacSecret)
 	if err != nil {
 		return "", err
