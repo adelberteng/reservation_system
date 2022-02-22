@@ -43,7 +43,7 @@ type Claims struct {
 
 func GenerateJWT(payload map[string]string) (string, error) {
 	claims := Claims{
-		Payload: map[string]string{"name": "aaa"},
+		Payload: payload,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -65,7 +65,7 @@ func ParseJWT(tokenString string) (jwt.MapClaims, error) {
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New(fmt.Sprintf("Unexpected signing method: %v", token.Header["alg"]))
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
 		return hmacSecret, nil
