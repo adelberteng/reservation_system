@@ -33,31 +33,29 @@ func (u *User) TableName() string {
 }
 
 func Register(name, password, phone, email string) error {
-	nameResult, err := engine.Table("user_tbl").Where("name = ?", name).QueryString()
-	if err != nil {
-		return err
-	} else if nameResult != nil {
+	queryResult, err := engine.Table("user_tbl").Where(
+		"name = ? and phone = ? and email = ? ", name, phone, email).QueryString()
+
+	var record map[string]string
+	if queryResult != nil {
+		record = queryResult[0]
+	}
+
+	if record["name"] == name {
 		return errors.New("This user name had been registered")
-	}
-
-	phoneResult, err := engine.Table("user_tbl").Where("phone = ?", phone).QueryString()
-	if err != nil {
-		return err
-	} else if phoneResult != nil {
+	} else if record["phone"] == phone {
 		return errors.New("This phone number had been registered")
-	}
-
-	emailResult, err := engine.Table("user_tbl").Where("email = ?", email).QueryString()
-	if err != nil {
-		return err
-	} else if emailResult != nil {
+	} else if record["email"] == email {
 		return errors.New("This email address had been registered")
+	} else if err != nil {
+		return err
 	}
 
 	passwordHash, err := utils.GeneratePasswordHash(password)
 	if err != nil {
 		return err
 	}
+
 	user := User{Name: name, PasswordHash: passwordHash, Phone: phone, Email: email}
 
 	_, err = engine.Insert(&user)
