@@ -110,8 +110,8 @@ func UserLogin(c *gin.Context) {
 	}
 	jwt, err := utils.GenerateJWT(jwtPayload)
 
+	c.Header("Authorization", jwt)
 	c.JSON(http.StatusOK, gin.H{
-		"token":   jwt,
 		"message": "login success.",
 	})
 }

@@ -13,5 +13,4 @@ var (
 func main() {
 	router := routers.SetupRoute()
 	router.Run()
-
 }

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"errors"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 )
 
 var (
-	expirationTime = time.Now().Add(5 * time.Minute)
+	expirationTime = time.Now().Add(10 * time.Minute)
 	secretKey      = cfg.Section("app").Key("secret_key").String()
 )
 
@@ -65,13 +66,13 @@ func ParseJWT(tokenString string) (jwt.MapClaims, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-
 		return hmacSecret, nil
 	})
 
-	fmt.Printf("%+v \n", token)
+	fmt.Println(token)
+
 	if !token.Valid {
-		fmt.Println("token invalid.")
+		return nil, errors.New("token invalid.")
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
