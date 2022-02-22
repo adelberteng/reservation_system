@@ -11,7 +11,7 @@ func SetupRoute() *gin.Engine {
 
 	user := router.Group("/user")
 	{
-		user.POST("/signup", handlers.UserRegister)
+		user.POST("/register", handlers.UserRegister)
 		user.POST("/login", handlers.UserLogin)
 	}
 

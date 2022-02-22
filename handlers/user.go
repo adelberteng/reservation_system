@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +26,7 @@ func UserRegister(c *gin.Context) {
 	email := json["email"]
 	if name == "" || password == "" || phone == "" || email == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": errors.New("these fields can not be empty"),
+			"message": "these fields can not be empty",
 		})
 		return
 	}
@@ -54,7 +54,7 @@ func UserRegister(c *gin.Context) {
 		return
 	} else if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
+			"message": fmt.Sprint(err),
 		})
 		return
 	}
@@ -62,7 +62,7 @@ func UserRegister(c *gin.Context) {
 	passwordHash, err := utils.GeneratePasswordHash(password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
+			"message": fmt.Sprint(err),
 		})
 		return
 	}
@@ -72,7 +72,7 @@ func UserRegister(c *gin.Context) {
 	_, err = engine.Insert(&user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
+			"message": fmt.Sprint(err),
 		})
 		return
 	}
@@ -91,8 +91,8 @@ func UserLogin(c *gin.Context) {
 
 	user, err := models.GetUserByName(name)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": err,
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": fmt.Sprint(err),
 		})
 		return
 	}
