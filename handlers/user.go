@@ -25,7 +25,7 @@ func UserRegister(c *gin.Context) {
 	phone := json["phone"]
 	email := json["email"]
 	if name == "" || password == "" || phone == "" || email == "" {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"message": "these fields can not be empty",
 		})
 		return
@@ -48,7 +48,7 @@ func UserRegister(c *gin.Context) {
 				break
 			}
 		}
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"message": errMessage,
 		})
 		return
