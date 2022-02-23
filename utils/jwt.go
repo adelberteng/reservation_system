@@ -1,9 +1,8 @@
 package utils
 
 import (
-	"fmt"
 	"errors"
-	"golang.org/x/crypto/bcrypt"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -13,28 +12,6 @@ var (
 	expirationTime = time.Now().Add(10 * time.Minute)
 	secretKey      = cfg.Section("app").Key("secret_key").String()
 )
-
-func GeneratePasswordHash(password string) (string, error) {
-	pw := []byte(password)
-	passwordHash, err := bcrypt.GenerateFromPassword(pw, bcrypt.MinCost)
-	if err != nil {
-		return "", err
-	}
-
-	return string(passwordHash), nil
-}
-
-func VerifyPassword(password, passwordHash string) bool {
-	pw := []byte(password)
-	hash := []byte(passwordHash)
-
-	err := bcrypt.CompareHashAndPassword(hash, pw)
-	if err != nil {
-		return false
-	}
-
-	return true
-}
 
 type Claims struct {
 	Payload map[string]string
@@ -59,7 +36,7 @@ func GenerateJWT(payload map[string]string) (string, error) {
 	return tokenString, err
 }
 
-func ParseJWT(tokenString string) (jwt.MapClaims, error) {
+func ParseJWT(tokenString string) (*jwt.Token, error) {
 	hmacSecret := []byte(secretKey)
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -68,16 +45,21 @@ func ParseJWT(tokenString string) (jwt.MapClaims, error) {
 		}
 		return hmacSecret, nil
 	})
-
-	fmt.Println(token)
-
-	if !token.Valid {
-		return nil, errors.New("token invalid.")
+	if err != nil {
+		return nil, err
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+	return token, nil
+}
+
+func VerifyJWT(token *jwt.Token) bool {
+	return token.Valid
+}
+
+func RetrieveJWT(token *jwt.Token) (jwt.MapClaims, error) {
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		return claims, nil
 	} else {
-		return nil, err
+		return nil, errors.New("token retrieve not complete.")
 	}
 }
