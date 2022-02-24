@@ -3,7 +3,8 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 
-	handlers "github.com/adelberteng/reservation_system/handlers"
+	"github.com/adelberteng/reservation_system/handlers"
+	"github.com/adelberteng/reservation_system/middleware"
 )
 
 func SetupRoute() *gin.Engine {
@@ -14,6 +15,12 @@ func SetupRoute() *gin.Engine {
 		user.POST("/register", handlers.UserRegister)
 		user.POST("/login", handlers.UserLogin)
 	}
+	
+	router.GET("/ping", middleware.Verify, func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 
 	return router
 }
