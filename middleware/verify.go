@@ -13,7 +13,7 @@ func VerifyToken(c *gin.Context) {
 	token, err := utils.ParseJWT(tokenStr)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
-			"message":    "can not parse token.",
+			"message": "can not parse token.",
 		})
 		c.Abort()
 		return
@@ -21,11 +21,22 @@ func VerifyToken(c *gin.Context) {
 
 	if !token.Valid {
 		c.JSON(http.StatusUnauthorized, gin.H{
-			"message":    "token is invalid.",
+			"message": "token is invalid.",
 		})
 		c.Abort()
 		return
 	}
+
+	claims, err := utils.RetrieveJWT(token)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "retrieve token is failed.",
+		})
+		c.Abort()
+		return
+	}
+
+	c.Set("claims", claims)
 	
 	c.Next()
 }
