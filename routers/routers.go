@@ -16,7 +16,7 @@ func SetupRoute() *gin.Engine {
 		user.POST("/login", handlers.UserLogin)
 	}
 	
-	router.GET("/ping", middleware.Verify, func(c *gin.Context) {
+	router.GET("/ping", middleware.VerifyToken, func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
