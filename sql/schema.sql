@@ -30,11 +30,12 @@ CREATE TABLE IF NOT EXISTS place_type_tbl (
 
 CREATE TABLE IF NOT EXISTS place_tbl (
 	id INT AUTO_INCREMENT NOT NULL,
+	place_name VARCHAR(32) NOT NULL,
 	owner_id INT NOT NULL,
 	region_id INT NOT NULL,
 	type_id INT NOT NULL,
 	address VARCHAR(255) NOT NULL,
-	capacity INT,
+	capacity INT NOT NULL,
 	PRIMARY KEY (id),
     FOREIGN KEY (owner_id)
         REFERENCES owner_tbl (id)

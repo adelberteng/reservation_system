@@ -16,11 +16,13 @@ func SetupRoute() *gin.Engine {
 		user.POST("/login", handlers.UserLogin)
 	}
 	
-	router.GET("/ping", middleware.VerifyToken, func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	
+	test := router.Group("/test")
+	test.Use(middleware.VerifyToken)
+	{
+		test.GET("/ping", func(c *gin.Context) {c.JSON(200, gin.H{"message": "pong"})})
+	}
+	
 
 	return router
 }
