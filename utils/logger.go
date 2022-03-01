@@ -7,12 +7,10 @@ import (
 	goLogger "github.com/adelberteng/go_logger"
 )
 
-var cfg = GetConfig()
-
 func GetLogger() goLogger.Logger {
-	logDir := cfg.Section("log").Key("log_dir").String()
-	logName := cfg.Section("log").Key("log_file_name").String()
-	logLevel := cfg.Section("log").Key("log_level").String()
+	logDir := Conf.Log.LogDir
+	logName := Conf.Log.LogFileName
+	logLevel := Conf.Log.Level
 
 	os.MkdirAll(logDir, 0766)
 	logFile, err := os.OpenFile(logDir+"/"+logName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)

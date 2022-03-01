@@ -6,7 +6,6 @@ import (
 )
 
 var (
-	cfg    = utils.GetConfig()
 	logger = utils.GetLogger()
 )
 
