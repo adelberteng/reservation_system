@@ -10,7 +10,7 @@ import (
 
 var (
 	expirationTime = time.Now().Add(30 * time.Minute)
-	secretKey      = Conf.App.SecretKey
+	secretKey      = Conf.AppSecretKey
 )
 
 type Claims struct {

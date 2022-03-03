@@ -12,28 +12,22 @@ import (
 var (
 	conf = utils.Conf
 	logger           = utils.GetLogger()
-	dbType           string
-	dbEndpoint       string
-	dbPort           string
-	dbUser           string
-	dbPassword       string
-	dbDB             string
 	dataSourceString string
 )
 
 func init() {
 	dataSourceString = fmt.Sprintf(
 		"%v:%v@tcp(%v:%v)/%v?charset=utf8",
-		conf.DB.User,
-		conf.DB.Password,
-		conf.DB.Endpoint,
-		conf.DB.Port,
-		conf.DB.DB,
+		conf.DBUser,
+		conf.DBPassword,
+		conf.DBEndpoint,
+		conf.DBPort,
+		conf.DBDatabase,
 	)
 }
 
 func GetSQLClient() *xorm.Engine {
-	engine, err := xorm.NewEngine(conf.DB.Type, dataSourceString)
+	engine, err := xorm.NewEngine(conf.DBType, dataSourceString)
 	if err != nil {
 		logger.Error(err)
 	}
