@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	logger = utils.GetLogger()
+	logger = utils.Logger
 )
 
 func main() {

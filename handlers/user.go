@@ -12,8 +12,8 @@ import (
 )
 
 var (
-	logger = utils.GetLogger()
-	engine = db.GetSQLClient()
+	logger = utils.Logger
+	engine = db.Engine
 )
 
 func UserRegister(c *gin.Context) {

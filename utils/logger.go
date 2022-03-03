@@ -7,7 +7,9 @@ import (
 	goLogger "github.com/adelberteng/go_logger"
 )
 
-func GetLogger() goLogger.Logger {
+var Logger goLogger.Logger
+
+func init() {
 	logDir := Conf.LogDir
 	logName := Conf.LogFileName
 	logLevel := Conf.LogLevel
@@ -20,5 +22,5 @@ func GetLogger() goLogger.Logger {
 		log.Fatalf("log file open error : %v", err)
 	}
 
-	return goLogger.CreateLogger(logFile, logLevel)
+	Logger = goLogger.CreateLogger(logFile, logLevel)
 }

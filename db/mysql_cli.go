@@ -11,8 +11,9 @@ import (
 
 var (
 	conf = utils.Conf
-	logger           = utils.GetLogger()
+	logger           = utils.Logger
 	dataSourceString string
+	Engine *xorm.Engine
 )
 
 func init() {
@@ -24,13 +25,11 @@ func init() {
 		conf.DBPort,
 		conf.DBDatabase,
 	)
-}
 
-func GetSQLClient() *xorm.Engine {
-	engine, err := xorm.NewEngine(conf.DBType, dataSourceString)
+	var err error
+
+	Engine, err = xorm.NewEngine(conf.DBType, dataSourceString)
 	if err != nil {
 		logger.Error(err)
 	}
-
-	return engine
 }
