@@ -15,14 +15,12 @@ func SetupRoute() *gin.Engine {
 		user.POST("/register", handlers.UserRegister)
 		user.POST("/login", handlers.UserLogin)
 	}
-	
-	
+
 	test := router.Group("/test")
 	test.Use(middleware.VerifyToken)
 	{
-		test.GET("/ping", func(c *gin.Context) {c.JSON(200, gin.H{"message": "pong"})})
+		test.GET("/ping", func(c *gin.Context) { c.JSON(200, gin.H{"message": "pong"}) })
 	}
-	
 
 	return router
 }

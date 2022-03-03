@@ -6,14 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/adelberteng/reservation_system/db"
 	"github.com/adelberteng/reservation_system/models"
 	"github.com/adelberteng/reservation_system/utils"
-)
-
-var (
-	logger = utils.Logger
-	engine = db.Engine
 )
 
 func UserRegister(c *gin.Context) {

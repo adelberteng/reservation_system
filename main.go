@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	logger = utils.Logger
+	logger  = utils.Logger
 	appConf = utils.AppConf
 )
 

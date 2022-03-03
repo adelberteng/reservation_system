@@ -8,28 +8,28 @@ import (
 )
 
 type DBConfig struct {
-	Type string
+	Type     string
 	Endpoint string
-	Port string
-	User string
+	Port     string
+	User     string
 	Password string
 	Database string
 }
 
 type AppConfig struct {
-	Port string
+	Port      string
 	SecretKey string
 }
 
 type LoggerConfig struct {
-	Dir string
+	Dir      string
 	FileName string
-	Level string
+	Level    string
 }
 
 var (
-	DBConf DBConfig
-	AppConf AppConfig
+	DBConf     DBConfig
+	AppConf    AppConfig
 	LoggerConf LoggerConfig
 )
 
