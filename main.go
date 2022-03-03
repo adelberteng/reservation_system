@@ -7,9 +7,10 @@ import (
 
 var (
 	logger = utils.Logger
+	appConf = utils.AppConf
 )
 
 func main() {
 	router := routers.SetupRoute()
-	router.Run()
+	router.Run(appConf.Port)
 }

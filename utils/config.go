@@ -7,21 +7,31 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-type Config struct {
-	DBType string
-	DBEndpoint string
-	DBPort string
-	DBUser string
-	DBPassword string
-	DBDatabase string
-	AppPort string
-	AppSecretKey string
-	LogDir string
-	LogFileName string
-	LogLevel string
+type DBConfig struct {
+	Type string
+	Endpoint string
+	Port string
+	User string
+	Password string
+	Database string
 }
 
-var Conf Config
+type AppConfig struct {
+	Port string
+	SecretKey string
+}
+
+type LoggerConfig struct {
+	Dir string
+	FileName string
+	Level string
+}
+
+var (
+	DBConf DBConfig
+	AppConf AppConfig
+	LoggerConf LoggerConfig
+)
 
 func init() {
 	cfg, err := ini.Load("conf/config.ini")
@@ -30,17 +40,17 @@ func init() {
 		os.Exit(1)
 	}
 
-	Conf.DBType = cfg.Section("db").Key("db_type").String()
-	Conf.DBEndpoint = cfg.Section("db").Key("endpoint").String()
-	Conf.DBPort = cfg.Section("db").Key("port").String()
-	Conf.DBUser = cfg.Section("db").Key("user").String()
-	Conf.DBPassword = cfg.Section("db").Key("password").String()
-	Conf.DBDatabase = cfg.Section("db").Key("db").String()
+	DBConf.Type = cfg.Section("db").Key("db_type").String()
+	DBConf.Endpoint = cfg.Section("db").Key("endpoint").String()
+	DBConf.Port = cfg.Section("db").Key("port").String()
+	DBConf.User = cfg.Section("db").Key("user").String()
+	DBConf.Password = cfg.Section("db").Key("password").String()
+	DBConf.Database = cfg.Section("db").Key("db").String()
 
-	Conf.AppPort = cfg.Section("app").Key("service_port").String()
-	Conf.AppSecretKey = cfg.Section("app").Key("secret_key").String()
+	AppConf.Port = cfg.Section("app").Key("service_port").String()
+	AppConf.SecretKey = cfg.Section("app").Key("secret_key").String()
 
-	Conf.LogDir = cfg.Section("log").Key("log_dir").String()
-	Conf.LogFileName = cfg.Section("log").Key("log_file_name").String()
-	Conf.LogLevel = cfg.Section("log").Key("log_level").String()
+	LoggerConf.Dir = cfg.Section("log").Key("log_dir").String()
+	LoggerConf.FileName = cfg.Section("log").Key("log_file_name").String()
+	LoggerConf.Level = cfg.Section("log").Key("log_level").String()
 }

@@ -10,9 +10,9 @@ import (
 var Logger goLogger.Logger
 
 func init() {
-	logDir := Conf.LogDir
-	logName := Conf.LogFileName
-	logLevel := Conf.LogLevel
+	logDir := LoggerConf.Dir
+	logName := LoggerConf.FileName
+	logLevel := LoggerConf.Level
 
 	os.MkdirAll(logDir, 0766)
 	logFile, err := os.OpenFile(logDir+"/"+logName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)

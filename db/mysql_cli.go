@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	conf = utils.Conf
+	conf = utils.DBConf
 	logger           = utils.Logger
 	dataSourceString string
 	Engine *xorm.Engine
@@ -19,16 +19,16 @@ var (
 func init() {
 	dataSourceString = fmt.Sprintf(
 		"%v:%v@tcp(%v:%v)/%v?charset=utf8",
-		conf.DBUser,
-		conf.DBPassword,
-		conf.DBEndpoint,
-		conf.DBPort,
-		conf.DBDatabase,
+		conf.User,
+		conf.Password,
+		conf.Endpoint,
+		conf.Port,
+		conf.Database,
 	)
 
 	var err error
 
-	Engine, err = xorm.NewEngine(conf.DBType, dataSourceString)
+	Engine, err = xorm.NewEngine(conf.Type, dataSourceString)
 	if err != nil {
 		logger.Error(err)
 	}
