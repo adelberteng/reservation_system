@@ -41,7 +41,7 @@ func ParseJWT(tokenString string) (*jwt.Token, error) {
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return hmacSecret, nil
 	})
@@ -60,6 +60,6 @@ func RetrieveJWT(token *jwt.Token) (jwt.MapClaims, error) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		return claims, nil
 	} else {
-		return nil, errors.New("token retrieve not complete.")
+		return nil, errors.New("token retrieve not complete")
 	}
 }
