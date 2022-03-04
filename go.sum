@@ -10,6 +10,8 @@ github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMx
 github.com/VividCortex/gohistogram v1.0.0/go.mod h1:Pf5mBqqDxYaXu3hDrrU+w6nw50o/4+TcAqDqk/vUH7g=
 github.com/adelberteng/go_logger v0.0.0-20220210143346-fc702892e7dc h1:QheCsmN0tj9QSJdGGlBrawc0SwrHQ9mzNwD25xWLEs0=
 github.com/adelberteng/go_logger v0.0.0-20220210143346-fc702892e7dc/go.mod h1:85+FxwTnMVYbw6IM54UX3Rllx4Q2lhXaQNultb/Sqr0=
+github.com/adelberteng/go_logger v0.0.0-20220304083540-223ceceddf48 h1:XfkFHZuKVdnjwuE5cTG9aw1TEQd/3yNiJyQJ83wvtdQ=
+github.com/adelberteng/go_logger v0.0.0-20220304083540-223ceceddf48/go.mod h1:vwE430KDs1jbrh6H3t2TCf0H/d0PX+1v5lCHqbs6uuk=
 github.com/afex/hystrix-go v0.0.0-20180502004556-fa1af6a1f4f5/go.mod h1:SkGFH1ia65gfNATL8TAiHDNxPzPdmEL5uirI2Uyuz6c=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=

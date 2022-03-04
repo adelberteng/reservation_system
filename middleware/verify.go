@@ -37,6 +37,6 @@ func VerifyToken(c *gin.Context) {
 	}
 
 	c.Set("claims", claims)
-	
+
 	c.Next()
 }

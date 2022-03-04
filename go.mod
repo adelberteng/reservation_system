@@ -3,7 +3,7 @@ module github.com/adelberteng/reservation_system
 go 1.17
 
 require (
-	github.com/adelberteng/go_logger v0.0.0-20220210143346-fc702892e7dc
+	github.com/adelberteng/go_logger v0.0.0-20220304083540-223ceceddf48
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-jwt/jwt/v4 v4.3.0
