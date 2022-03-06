@@ -1,43 +1,117 @@
 package handlers
 
 import (
-	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+
+	"github.com/adelberteng/reservation_system/models"
+	"github.com/adelberteng/reservation_system/utils"
 )
 
-type Owner struct {
-	Id           string `xorm:"not null pk autoincr INT(11)"`
-	CompanyName  string `xorm:"not null unique VARCHAR(32)"`
-	PasswordHash string `xorm:"not null VARCHAR(128)"`
-	Phone        string `xorm:"not null unique CHAR(10)"`
-	Email        string `xorm:"not null unique VARCHAR(255)"`
-}
+func OwnerRegister(c *gin.Context) {
+	var json map[string]string
+	c.ShouldBindJSON(&json)
 
-func init() {
-	err := engine.Sync2(new(Owner))
-	if err != nil {
-		logger.Error(err)
+	companyName := json["company_name"]
+	password := json["password"]
+	phone := json["phone"]
+	email := json["email"]
+	if companyName == "" || password == "" || phone == "" || email == "" {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": "these fields can not be empty",
+		})
+		return
 	}
-}
 
-func (o *Owner) TableName() string {
-	return "owner_tbl"
-}
+	queryResult, err := engine.Table("owner_tbl").Where(
+		"comany_name = ? or phone = ? or email = ? ", companyName, phone, email).QueryString()
 
-func GetOwnerByName(name string) (Owner, error) {
-	queryResult, err := engine.Table("owner_tbl").Where("company_name = ? ", name).QueryString()
-	if queryResult == nil {
-		return Owner{}, errors.New("the owner is not exist.")
+	if queryResult != nil {
+		var errMessage string
+		for _, row := range queryResult {
+			if row["name"] == companyName {
+				errMessage = "This company_name had been registered"
+				break
+			} else if row["phone"] == phone {
+				errMessage = "This phone number had been registered"
+				break
+			} else if row["email"] == email {
+				errMessage = "This email address had been registered"
+				break
+			}
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"message": errMessage,
+		})
+		return
 	} else if err != nil {
-		return Owner{}, err
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": fmt.Sprint(err),
+		})
+		return
 	}
 
-	owner := Owner{
-		Id:           queryResult[0]["uid"],
-		CompanyName:  name,
-		PasswordHash: queryResult[0]["password_hash"],
-		Phone:        queryResult[0]["phone"],
-		Email:        queryResult[0]["email"],
+	passwordHash, err := utils.GeneratePasswordHash(password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": fmt.Sprint(err),
+		})
+		return
 	}
 
-	return owner, nil
+	owner := models.Owner{CompanyName: companyName, PasswordHash: passwordHash, Phone: phone, Email: email}
+
+	_, err = engine.Insert(&owner)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": fmt.Sprint(err),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "owner register success.",
+	})
+}
+
+func OwnerLogin(c *gin.Context) {
+	var json map[string]string
+	c.ShouldBindJSON(&json)
+
+	companyName := json["company_name"]
+	password := json["password"]
+
+	owner, err := models.GetOwnerByName(companyName)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": fmt.Sprint(err),
+		})
+		return
+	}
+
+	if !utils.VerifyPassword(password, owner.PasswordHash) {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "the password is incorrect.",
+		})
+		return
+	}
+
+	jwtPayload := map[string]string{
+		"id":           owner.Id,
+		"comapny_name": owner.CompanyName,
+	}
+	jwt, err := utils.GenerateJWT(jwtPayload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": fmt.Sprint(err),
+		})
+		return
+	}
+
+	c.Header("Authorization", jwt)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "login success.",
+	})
 }
