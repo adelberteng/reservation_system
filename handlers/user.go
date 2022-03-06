@@ -103,6 +103,12 @@ func UserLogin(c *gin.Context) {
 		"name": user.Name,
 	}
 	jwt, err := utils.GenerateJWT(jwtPayload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": fmt.Sprint(err),
+		})
+		return
+	}
 
 	c.Header("Authorization", jwt)
 	c.JSON(http.StatusOK, gin.H{
