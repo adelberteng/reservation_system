@@ -12,5 +12,5 @@ var (
 
 func main() {
 	router := routers.SetupRoute()
-	router.Run(appConf.Port)
+	router.Run(":" + appConf.Port)
 }
