@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"time"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -38,6 +39,9 @@ func GenerateJWT(payload map[string]string) (string, error) {
 
 func ParseJWT(tokenString string) (*jwt.Token, error) {
 	hmacSecret := []byte(secretKey)
+
+	// deal with bearer token
+	tokenString = strings.Replace(tokenString, "Bearer ", "", -1)
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
