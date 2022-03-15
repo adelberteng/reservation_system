@@ -100,7 +100,7 @@ func OwnerLogin(c *gin.Context) {
 
 	jwtPayload := map[string]string{
 		"id":           owner.Id,
-		"comapny_name": owner.CompanyName,
+		"company_name": owner.CompanyName,
 	}
 	jwt, err := utils.GenerateJWT(jwtPayload)
 	if err != nil {
