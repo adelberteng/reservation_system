@@ -31,7 +31,7 @@ func OwnerRegister(c *gin.Context) {
 	if queryResult != nil {
 		var errMessage string
 		for _, row := range queryResult {
-			if row["name"] == companyName {
+			if row["comany_name"] == companyName {
 				errMessage = "This company_name had been registered"
 				break
 			} else if row["phone"] == phone {
