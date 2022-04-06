@@ -1,13 +1,12 @@
 package utils
 
 import (
-	"log"
 	"os"
-
-	goLogger "github.com/adelberteng/go_logger"
+	"io"
+	"github.com/sirupsen/logrus"
 )
 
-var Logger goLogger.Logger
+var Logger = logrus.New()
 
 func init() {
 	logDir := LoggerConf.Dir
@@ -16,14 +15,15 @@ func init() {
 
 	os.MkdirAll(logDir, 0766)
 	logFile, err := os.OpenFile(logDir+"/"+logName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil && err == os.ErrNotExist {
-		os.Create(logDir + "/" + logName)
-	} else if err != nil {
-		log.Fatalf("log file open error : %v", err)
+	if  err != nil {
+		Logger.Fatalf("log file open error : %v", err)
 	}
 
-	Logger, err = goLogger.CreateLogger(logFile, logLevel)
+	Logger.Out = io.MultiWriter(os.Stdout, logFile)
+	Logger.Formatter = &logrus.JSONFormatter{}
+	logrusLevel, err := logrus.ParseLevel(logLevel)
 	if err != nil {
-		log.Fatalf("logger create error : %v", err)
+		Logger.Fatalf("log level error : %v", err)
 	}
+	Logger.Level = logrusLevel
 }

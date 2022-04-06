@@ -6,11 +6,11 @@ import (
 )
 
 var (
-	logger  = utils.Logger
+	log  = utils.Logger
 	appConf = utils.AppConf
 )
 
 func main() {
+	log.Info("logrus")
 	router := routers.SetupRoute()
-	router.Run(":" + appConf.Port)
 }
