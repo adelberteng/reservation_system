@@ -13,4 +13,5 @@ var (
 func main() {
 	log.Info("logrus")
 	router := routers.SetupRoute()
+	router.Run(":" + appConf.Port)
 }
