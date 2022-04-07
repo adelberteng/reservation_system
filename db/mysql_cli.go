@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	conf = utils.DBConf
+	conf = utils.Config.DB
 	logger           = utils.Logger
 	dataSourceString string
 	Engine *xorm.Engine

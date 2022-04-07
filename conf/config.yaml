@@ -1,0 +1,16 @@
+db:
+  type: mysql
+  endpoint: localhost
+  port: 3306
+  user: root
+  password: password
+  database: reservation
+
+app:
+  port: 8080
+  secretkey: zxcvbnm
+
+log:
+  dir: log
+  filename: app.log
+  level: debug

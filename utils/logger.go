@@ -9,9 +9,9 @@ import (
 var Logger = logrus.New()
 
 func init() {
-	logDir := LoggerConf.Dir
-	logName := LoggerConf.FileName
-	logLevel := LoggerConf.Level
+	logDir := Config.Log.Dir
+	logName := Config.Log.FileName
+	logLevel := Config.Log.Level
 
 	os.MkdirAll(logDir, 0766)
 	logFile, err := os.OpenFile(logDir+"/"+logName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)

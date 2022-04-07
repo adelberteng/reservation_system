@@ -1,13 +1,22 @@
 package utils
 
 import (
-	"fmt"
 	"os"
+	"sync"
+	"strings"
+	"fmt"
 
-	"gopkg.in/ini.v1"
+	// "gopkg.in/ini.v1"
+	"github.com/spf13/viper"
 )
 
-type DBConfig struct {
+type config struct {
+	DB *db
+	App *app
+	Log *log
+}
+
+type db struct {
 	Type     string
 	Endpoint string
 	Port     string
@@ -16,41 +25,41 @@ type DBConfig struct {
 	Database string
 }
 
-type AppConfig struct {
+type app struct {
 	Port      string
 	SecretKey string
 }
 
-type LoggerConfig struct {
+type log struct {
 	Dir      string
 	FileName string
 	Level    string
 }
 
 var (
-	DBConf     DBConfig
-	AppConf    AppConfig
-	LoggerConf LoggerConfig
+	once sync.Once
+	DB db
+	App app
+	Log log
+	Config = &config{
+		DB: &DB,
+		App: &App,
+		Log: &Log,
+	}
 )
 
 func init() {
-	cfg, err := ini.Load("conf/config.ini")
-	if err != nil {
-		fmt.Println("error happened when load config.")
-		os.Exit(1)
-	}
+	once.Do(func() {
+		viper.SetConfigFile("./conf/config.yaml")
+		viper.SetConfigType("yaml")
+		viper.AutomaticEnv()
+		viper.SetEnvKeyReplacer(strings.NewReplacer("_", ""))
 
-	DBConf.Type = cfg.Section("db").Key("db_type").String()
-	DBConf.Endpoint = cfg.Section("db").Key("endpoint").String()
-	DBConf.Port = cfg.Section("db").Key("port").String()
-	DBConf.User = cfg.Section("db").Key("user").String()
-	DBConf.Password = cfg.Section("db").Key("password").String()
-	DBConf.Database = cfg.Section("db").Key("db").String()
-
-	AppConf.Port = cfg.Section("app").Key("service_port").String()
-	AppConf.SecretKey = cfg.Section("app").Key("secret_key").String()
-
-	LoggerConf.Dir = cfg.Section("log").Key("log_dir").String()
-	LoggerConf.FileName = cfg.Section("log").Key("log_file_name").String()
-	LoggerConf.Level = cfg.Section("log").Key("log_level").String()
+		if err := viper.ReadInConfig(); err != nil {
+			fmt.Printf("fatal error config file: %s \n", err)
+			os.Exit(1)
+		}
+		
+		viper.Unmarshal(&Config)
+	})
 }
