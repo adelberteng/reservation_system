@@ -10,10 +10,10 @@ import (
 )
 
 var (
-	conf = utils.Config.DB
+	conf             = utils.Config.DB
 	logger           = utils.Logger
 	dataSourceString string
-	Engine *xorm.Engine
+	Engine           *xorm.Engine
 )
 
 func init() {

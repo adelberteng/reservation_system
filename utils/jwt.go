@@ -3,8 +3,8 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"time"
 	"strings"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )

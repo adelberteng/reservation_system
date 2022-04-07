@@ -8,15 +8,12 @@ type Activity struct {
 	EndTime   string `xorm:"not null time.Time`
 }
 
-func (a *Activity) TableName() string {
-	return "activity_tbl"
+func init() {
+	if err := engine.Sync2(new(Activity)); err != nil {
+		logger.Error(err)
+	}
 }
 
-func ViewActivity() ([]map[string]string, error) {
-	results, err := engine.QueryString("select * from activity_tbl")
-	if err != nil {
-		return nil, err
-	}
-
-	return results, nil
+func (a *Activity) TableName() string {
+	return "activity_tbl"
 }

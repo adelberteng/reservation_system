@@ -1,17 +1,16 @@
 package utils
 
 import (
-	"os"
-	"sync"
-	"strings"
 	"fmt"
+	"os"
+	"strings"
+	"sync"
 
-	// "gopkg.in/ini.v1"
 	"github.com/spf13/viper"
 )
 
 type config struct {
-	DB *db
+	DB  *db
 	App *app
 	Log *log
 }
@@ -37,12 +36,12 @@ type log struct {
 }
 
 var (
-	once sync.Once
-	DB db
-	App app
-	Log log
+	once   sync.Once
+	DB     db
+	App    app
+	Log    log
 	Config = &config{
-		DB: &DB,
+		DB:  &DB,
 		App: &App,
 		Log: &Log,
 	}
@@ -59,7 +58,7 @@ func init() {
 			fmt.Printf("fatal error config file: %s \n", err)
 			os.Exit(1)
 		}
-		
+
 		viper.Unmarshal(&Config)
 	})
 }

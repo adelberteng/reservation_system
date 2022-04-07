@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"os"
-	"io"
 	"github.com/sirupsen/logrus"
+	"io"
+	"os"
 )
 
 var Logger = logrus.New()
@@ -15,7 +15,7 @@ func init() {
 
 	os.MkdirAll(logDir, 0766)
 	logFile, err := os.OpenFile(logDir+"/"+logName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if  err != nil {
+	if err != nil {
 		Logger.Fatalf("log file open error : %v", err)
 	}
 

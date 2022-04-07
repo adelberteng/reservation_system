@@ -13,8 +13,7 @@ type User struct {
 }
 
 func init() {
-	err := engine.Sync2(new(User))
-	if err != nil {
+	if err := engine.Sync2(new(User)); err != nil {
 		logger.Error(err)
 	}
 }
