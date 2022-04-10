@@ -2,8 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"os"
-	"strings"
 	"sync"
 
 	"github.com/spf13/viper"
@@ -51,12 +49,11 @@ func init() {
 	once.Do(func() {
 		viper.SetConfigFile("./conf/config.yaml")
 		viper.SetConfigType("yaml")
+
 		viper.AutomaticEnv()
-		viper.SetEnvKeyReplacer(strings.NewReplacer("_", ""))
 
 		if err := viper.ReadInConfig(); err != nil {
-			fmt.Printf("fatal error config file: %s \n", err)
-			os.Exit(1)
+			panic(fmt.Errorf("Fatal error config file: %w \n", err))
 		}
 
 		viper.Unmarshal(&Config)
