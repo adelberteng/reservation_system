@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/adelberteng/reservation_system/models"
 )
 
 func AddPlace(c *gin.Context) {
@@ -33,11 +35,22 @@ func AddPlace(c *gin.Context) {
 
 	if queryResult != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "This place had been registered",
+			"message": "This place address had been registered",
 		})
 		return
 	}
 
+	place := models.Place{PlaceName: placeName, Address: address, Capacity: capacity}
+	_, err = engine.Insert(&place)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": fmt.Sprint(err),
+		})
+		return
+	}
 
+	c.JSON(http.StatusOK, gin.H{
+		"message": "place adding success.",
+	})
 
 }
