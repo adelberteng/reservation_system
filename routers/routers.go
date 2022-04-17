@@ -22,6 +22,12 @@ func SetupRoute() *gin.Engine {
 		owner.POST("/login", handlers.UserLogin)
 	}
 
+	place := router.Group("/place")
+	place.Use(middleware.VerifyToken)
+	{
+		place.POST("/add", handlers.AddPlace)
+	}
+
 	test := router.Group("/test")
 	test.Use(middleware.VerifyToken)
 	{
