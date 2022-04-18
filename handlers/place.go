@@ -24,6 +24,7 @@ func AddPlace(c *gin.Context) {
 		})
 		return
 	}
+	fmt.Println(c.Get("claims"))
 
 	queryResult, err := engine.Table("place_tbl").Where("address = ? ", address).QueryString()
 	if err != nil {
@@ -39,6 +40,7 @@ func AddPlace(c *gin.Context) {
 		})
 		return
 	}
+
 
 	place := models.Place{PlaceName: placeName, Address: address, Capacity: capacity}
 	_, err = engine.Insert(&place)
