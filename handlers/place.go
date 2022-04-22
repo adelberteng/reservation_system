@@ -41,8 +41,8 @@ func AddPlace(c *gin.Context) {
 		return
 	}
 
-
-	place := models.Place{PlaceName: placeName, Address: address, Capacity: capacity}
+	// TODO: add owner_id in query
+	place := models.Place{PlaceName: placeName ,Address: address, Capacity: capacity}
 	_, err = engine.Insert(&place)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
