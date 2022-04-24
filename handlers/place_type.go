@@ -1,12 +1,12 @@
 package handlers
 
 import (
-    "fmt"
-    "net/http"
+	"fmt"
+	"net/http"
 
-    "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 
-    "github.com/adelberteng/reservation_system/models"
+	"github.com/adelberteng/reservation_system/models"
 )
 
 func AddPlaceType(c *gin.Context) {

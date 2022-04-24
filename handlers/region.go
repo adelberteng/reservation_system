@@ -1,12 +1,13 @@
 package handlers
 
 import (
-    "fmt"
-    "net/http"
+	"fmt"
+	"net/http"
 
-    "github.com/gin-gonic/gin"
+	"github.com/go-sql-driver/mysql"
+	"github.com/gin-gonic/gin"
 
-    "github.com/adelberteng/reservation_system/models"
+	"github.com/adelberteng/reservation_system/models"
 )
 
 func AddRegion(c *gin.Context) {
@@ -23,7 +24,14 @@ func AddRegion(c *gin.Context) {
 
 	region := models.Region{RegionName: regionName}
 	_, err := engine.Insert(&region)
-	if err != nil {
+	if mysqlErr, ok := err.(*mysql.MySQLError); ok {
+		if mysqlErr.Number == 1062 {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "this region had been registered",
+			})
+			return
+		}
+	} else if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": fmt.Sprint(err),
 		})
